@@ -22,33 +22,33 @@ Automatically detect which languages and technologies are used in your repositor
 
 ## Inputs
 
-| Input | Description | Default |
-|-------|-------------|---------|
-| `skip-detection` | Skip file-based detection | `false` |
-| `build-target` | Build targets to validate (comma-separated) | `all` |
-| `go-enabled` | Override Go detection (true/false/auto) | `auto` |
-| `python-enabled` | Override Python detection | `auto` |
-| `rust-enabled` | Override Rust detection | `auto` |
-| `frontend-enabled` | Override Frontend detection | `auto` |
-| `docker-enabled` | Override Docker detection | `auto` |
-| `protobuf-enabled` | Override Protobuf detection | `auto` |
+| Input              | Description                                 | Default |
+| ------------------ | ------------------------------------------- | ------- |
+| `skip-detection`   | Skip file-based detection                   | `false` |
+| `build-target`     | Build targets to validate (comma-separated) | `all`   |
+| `go-enabled`       | Override Go detection (true/false/auto)     | `auto`  |
+| `python-enabled`   | Override Python detection                   | `auto`  |
+| `rust-enabled`     | Override Rust detection                     | `auto`  |
+| `frontend-enabled` | Override Frontend detection                 | `auto`  |
+| `docker-enabled`   | Override Docker detection                   | `auto`  |
+| `protobuf-enabled` | Override Protobuf detection                 | `auto`  |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `has-go` | Whether Go is detected |
-| `has-python` | Whether Python is detected |
-| `has-rust` | Whether Rust is detected |
-| `has-frontend` | Whether Frontend/Node.js is detected |
-| `has-docker` | Whether Docker is detected |
-| `protobuf-needed` | Whether Protobuf processing is needed |
-| `primary-language` | Primary language of project |
-| `go-matrix` | Basic Go CI matrix |
-| `python-matrix` | Basic Python CI matrix |
-| `rust-matrix` | Basic Rust CI matrix |
-| `frontend-matrix` | Basic Frontend CI matrix |
-| `docker-matrix` | Basic Docker CI matrix |
+| Output             | Description                           |
+| ------------------ | ------------------------------------- |
+| `has-go`           | Whether Go is detected                |
+| `has-python`       | Whether Python is detected            |
+| `has-rust`         | Whether Rust is detected              |
+| `has-frontend`     | Whether Frontend/Node.js is detected  |
+| `has-docker`       | Whether Docker is detected            |
+| `protobuf-needed`  | Whether Protobuf processing is needed |
+| `primary-language` | Primary language of project           |
+| `go-matrix`        | Basic Go CI matrix                    |
+| `python-matrix`    | Basic Python CI matrix                |
+| `rust-matrix`      | Basic Rust CI matrix                  |
+| `frontend-matrix`  | Basic Frontend CI matrix              |
+| `docker-matrix`    | Basic Docker CI matrix                |
 
 ## Detection Logic
 
