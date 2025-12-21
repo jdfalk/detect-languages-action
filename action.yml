@@ -1,5 +1,5 @@
 # file: action.yml
-# version: 1.0.0
+# version: 1.0.1
 # guid: 6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c
 
 name: "Detect Languages and Technologies"
@@ -105,7 +105,7 @@ runs:
   steps:
     - name: Detect languages
       id: detect
-      shell: python
+      shell: bash
       env:
         SKIP_DETECTION: ${{ inputs.skip-detection }}
         BUILD_TARGET: ${{ inputs.build-target }}
