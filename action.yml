@@ -1,0 +1,118 @@
+# file: action.yml
+# version: 1.0.0
+# guid: 6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c
+
+name: "Detect Languages and Technologies"
+description: "Detect which languages and technologies are used in the repository"
+author: "jdfalk"
+
+branding:
+  icon: "search"
+  color: "purple"
+
+inputs:
+  skip-detection:
+    description: "Skip file-based detection and use overrides only"
+    required: false
+    default: "false"
+
+  build-target:
+    description: "Build targets to validate (comma-separated: go,python,rust,frontend,docker,protobuf)"
+    required: false
+    default: "all"
+
+  go-enabled:
+    description: "Override Go detection (true/false/auto)"
+    required: false
+    default: "auto"
+
+  python-enabled:
+    description: "Override Python detection (true/false/auto)"
+    required: false
+    default: "auto"
+
+  rust-enabled:
+    description: "Override Rust detection (true/false/auto)"
+    required: false
+    default: "auto"
+
+  frontend-enabled:
+    description: "Override Frontend detection (true/false/auto)"
+    required: false
+    default: "auto"
+
+  docker-enabled:
+    description: "Override Docker detection (true/false/auto)"
+    required: false
+    default: "auto"
+
+  protobuf-enabled:
+    description: "Override Protobuf detection (true/false/auto)"
+    required: false
+    default: "auto"
+
+outputs:
+  has-go:
+    description: "Whether Go is detected"
+    value: ${{ steps.detect.outputs.has-go }}
+
+  has-python:
+    description: "Whether Python is detected"
+    value: ${{ steps.detect.outputs.has-python }}
+
+  has-rust:
+    description: "Whether Rust is detected"
+    value: ${{ steps.detect.outputs.has-rust }}
+
+  has-frontend:
+    description: "Whether Frontend/Node.js is detected"
+    value: ${{ steps.detect.outputs.has-frontend }}
+
+  has-docker:
+    description: "Whether Docker is detected"
+    value: ${{ steps.detect.outputs.has-docker }}
+
+  protobuf-needed:
+    description: "Whether Protobuf processing is needed"
+    value: ${{ steps.detect.outputs.protobuf-needed }}
+
+  primary-language:
+    description: "Primary language of the project"
+    value: ${{ steps.detect.outputs.primary-language }}
+
+  go-matrix:
+    description: "Go CI matrix"
+    value: ${{ steps.detect.outputs.go-matrix }}
+
+  python-matrix:
+    description: "Python CI matrix"
+    value: ${{ steps.detect.outputs.python-matrix }}
+
+  rust-matrix:
+    description: "Rust CI matrix"
+    value: ${{ steps.detect.outputs.rust-matrix }}
+
+  frontend-matrix:
+    description: "Frontend CI matrix"
+    value: ${{ steps.detect.outputs.frontend-matrix }}
+
+  docker-matrix:
+    description: "Docker CI matrix"
+    value: ${{ steps.detect.outputs.docker-matrix }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Detect languages
+      id: detect
+      shell: python
+      env:
+        SKIP_DETECTION: ${{ inputs.skip-detection }}
+        BUILD_TARGET: ${{ inputs.build-target }}
+        GO_ENABLED: ${{ inputs.go-enabled }}
+        PYTHON_ENABLED: ${{ inputs.python-enabled }}
+        RUST_ENABLED: ${{ inputs.rust-enabled }}
+        FRONTEND_ENABLED: ${{ inputs.frontend-enabled }}
+        DOCKER_ENABLED: ${{ inputs.docker-enabled }}
+        PROTOBUF_ENABLED: ${{ inputs.protobuf-enabled }}
+      run: python "${{ github.action_path }}/src/detect_languages.py"
