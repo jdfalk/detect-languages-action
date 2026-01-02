@@ -40,4 +40,4 @@ Detects programming languages in a repository for CI matrix generation
 
 ---
 
-*This TODO.md was automatically generated on 2026-01-02*
+_This TODO.md was automatically generated on 2026-01-02_
