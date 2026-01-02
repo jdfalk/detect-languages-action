@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # file: src/detect_languages.py
-# version: 1.0.0
+# version: 1.0.1
 # guid: 6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c
 
 """Detect project languages and technologies"""
@@ -33,8 +33,6 @@ def normalize_override(value):
 
 def main():
     skip_detection = os.environ.get("SKIP_DETECTION", "false").lower() == "true"
-    build_target = os.environ.get("BUILD_TARGET", "all").lower()
-    targets = {t.strip() for t in build_target.split(",") if t.strip()}
 
     overrides = {
         "go": normalize_override(os.environ.get("GO_ENABLED", "auto")),
@@ -56,7 +54,9 @@ def main():
     else:
         # File-based detection
         has_go = Path("go.mod").exists() or Path("main.go").exists() or Path("cmd").exists()
-        has_python = any(Path(p).exists() for p in ["setup.py", "pyproject.toml", "requirements.txt"])
+        has_python = any(
+            Path(p).exists() for p in ["setup.py", "pyproject.toml", "requirements.txt"]
+        )
         has_rust = Path("Cargo.toml").exists()
         has_frontend = Path("package.json").exists()
         has_docker = Path("Dockerfile").exists() or Path("docker-compose.yml").exists()
