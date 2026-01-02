@@ -1,5 +1,5 @@
 <!-- file: TODO.md -->
-<!-- version: 1.0.0 -->
+<!-- version: 1.0.2 -->
 <!-- guid: ad47cbc5-c057-47aa-a933-fb01bef0f898 -->
 
 # TODO - detect-languages-action
@@ -40,4 +40,8 @@ Detects programming languages in a repository for CI matrix generation
 
 ---
 
+<!-- markdownlint-disable MD036 -->
+
 _This TODO.md was automatically generated on 2026-01-02_
+
+<!-- markdownlint-enable MD036 -->
