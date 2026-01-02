@@ -1,6 +1,7 @@
 # Detect Languages Action
 
-Automatically detect which languages and technologies are used in your repository with intelligent overrides and fallback handling.
+Automatically detect which languages and technologies are used in your
+repository with intelligent overrides and fallback handling.
 
 ## Usage
 
@@ -53,6 +54,7 @@ Automatically detect which languages and technologies are used in your repositor
 ## Detection Logic
 
 ### Automatic Detection
+
 - **Go**: `go.mod`, `main.go`, `cmd/` directory
 - **Python**: `setup.py`, `pyproject.toml`, `requirements.txt`
 - **Rust**: `Cargo.toml`
@@ -61,25 +63,29 @@ Automatically detect which languages and technologies are used in your repositor
 - **Protobuf**: Any `.proto` files
 
 ### Overrides
+
 Use override inputs to force specific languages:
 
 ```yaml
 with:
-  go-enabled: "true"        # Force Go detected
-  python-enabled: "false"   # Force Python not detected
-  rust-enabled: "auto"      # Auto-detect Rust
+  go-enabled: 'true' # Force Go detected
+  python-enabled: 'false' # Force Python not detected
+  rust-enabled: 'auto' # Auto-detect Rust
 ```
 
 ## Features
 
-✅ **File-Based Detection** - Inspects actual project files
-✅ **Smart Overrides** - Force languages on/off as needed
-✅ **Primary Language** - Identifies main project language
-✅ **Matrix Generation** - Basic CI matrices for each language
-✅ **Protobuf Support** - Detects proto files for code generation
+✅ **File-Based Detection** - Inspects actual project files ✅ **Smart
+Overrides** - Force languages on/off as needed ✅ **Primary Language** -
+Identifies main project language ✅ **Matrix Generation** - Basic CI matrices
+for each language ✅ **Protobuf Support** - Detects proto files for code
+generation
 
 ## Related Actions
 
-- [load-config-action](https://github.com/jdfalk/load-config-action) - Load repository config
-- [ci-generate-matrices-action](https://github.com/jdfalk/ci-generate-matrices-action) - Generate test matrices
-- [release-strategy-action](https://github.com/jdfalk/release-strategy-action) - Determine release strategy
+- [load-config-action](https://github.com/jdfalk/load-config-action) - Load
+  repository config
+- [ci-generate-matrices-action](https://github.com/jdfalk/ci-generate-matrices-action) -
+  Generate test matrices
+- [release-strategy-action](https://github.com/jdfalk/release-strategy-action) -
+  Determine release strategy

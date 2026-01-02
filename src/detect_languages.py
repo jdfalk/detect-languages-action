@@ -34,7 +34,7 @@ def normalize_override(value):
 def main():
     skip_detection = os.environ.get("SKIP_DETECTION", "false").lower() == "true"
     build_target = os.environ.get("BUILD_TARGET", "all").lower()
-    targets = set(t.strip() for t in build_target.split(",") if t.strip())
+    targets = {t.strip() for t in build_target.split(",") if t.strip()}
 
     overrides = {
         "go": normalize_override(os.environ.get("GO_ENABLED", "auto")),
