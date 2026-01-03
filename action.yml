@@ -1,5 +1,5 @@
 # file: action.yml
-# version: 1.0.1
+# version: 1.1.0
 # guid: 6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c
 
 name: "Detect Languages and Technologies"
@@ -50,61 +50,116 @@ inputs:
     description: "Override Protobuf detection (true/false/auto)"
     required: false
     default: "auto"
+  use-docker:
+    description: "Run inside the prebuilt Docker image"
+    required: false
+    default: "false"
+  docker-image:
+    description: "Docker image reference (tag or digest) to use when use-docker is true"
+    required: false
+    default: "ghcr.io/jdfalk/detect-languages-action:main"
 
 outputs:
   has-go:
     description: "Whether Go is detected"
-    value: ${{ steps.detect.outputs.has-go }}
+    value: ${{ steps.detect.outputs.has-go || steps.detect-docker.outputs.has-go }}
 
   has-python:
     description: "Whether Python is detected"
-    value: ${{ steps.detect.outputs.has-python }}
+    value: ${{ steps.detect.outputs.has-python || steps.detect-docker.outputs.has-python }}
 
   has-rust:
     description: "Whether Rust is detected"
-    value: ${{ steps.detect.outputs.has-rust }}
+    value: ${{ steps.detect.outputs.has-rust || steps.detect-docker.outputs.has-rust }}
 
   has-frontend:
     description: "Whether Frontend/Node.js is detected"
-    value: ${{ steps.detect.outputs.has-frontend }}
+    value: ${{ steps.detect.outputs.has-frontend || steps.detect-docker.outputs.has-frontend }}
 
   has-docker:
     description: "Whether Docker is detected"
-    value: ${{ steps.detect.outputs.has-docker }}
+    value: ${{ steps.detect.outputs.has-docker || steps.detect-docker.outputs.has-docker }}
 
   protobuf-needed:
     description: "Whether Protobuf processing is needed"
-    value: ${{ steps.detect.outputs.protobuf-needed }}
+    value: ${{ steps.detect.outputs.protobuf-needed || steps.detect-docker.outputs.protobuf-needed }}
 
   primary-language:
     description: "Primary language of the project"
-    value: ${{ steps.detect.outputs.primary-language }}
+    value: ${{ steps.detect.outputs.primary-language || steps.detect-docker.outputs.primary-language }}
 
   go-matrix:
     description: "Go CI matrix"
-    value: ${{ steps.detect.outputs.go-matrix }}
+    value: ${{ steps.detect.outputs.go-matrix || steps.detect-docker.outputs.go-matrix }}
 
   python-matrix:
     description: "Python CI matrix"
-    value: ${{ steps.detect.outputs.python-matrix }}
+    value: ${{ steps.detect.outputs.python-matrix || steps.detect-docker.outputs.python-matrix }}
 
   rust-matrix:
     description: "Rust CI matrix"
-    value: ${{ steps.detect.outputs.rust-matrix }}
+    value: ${{ steps.detect.outputs.rust-matrix || steps.detect-docker.outputs.rust-matrix }}
 
   frontend-matrix:
     description: "Frontend CI matrix"
-    value: ${{ steps.detect.outputs.frontend-matrix }}
+    value: ${{ steps.detect.outputs.frontend-matrix || steps.detect-docker.outputs.frontend-matrix }}
 
   docker-matrix:
     description: "Docker CI matrix"
-    value: ${{ steps.detect.outputs.docker-matrix }}
+    value: ${{ steps.detect.outputs.docker-matrix || steps.detect-docker.outputs.docker-matrix }}
 
 runs:
   using: "composite"
   steps:
-    - name: Detect languages
+    - name: Detect languages (docker)
+      id: detect-docker
+      if: inputs.use-docker == 'true'
+      shell: bash
+      env:
+        SKIP_DETECTION: ${{ inputs.skip-detection }}
+        BUILD_TARGET: ${{ inputs.build-target }}
+        GO_ENABLED: ${{ inputs.go-enabled }}
+        PYTHON_ENABLED: ${{ inputs.python-enabled }}
+        RUST_ENABLED: ${{ inputs.rust-enabled }}
+        FRONTEND_ENABLED: ${{ inputs.frontend-enabled }}
+        DOCKER_ENABLED: ${{ inputs.docker-enabled }}
+        PROTOBUF_ENABLED: ${{ inputs.protobuf-enabled }}
+        DOCKER_IMAGE: ${{ inputs.docker-image }}
+      run: |
+        set -euo pipefail
+
+        if ! command -v docker >/dev/null 2>&1; then
+          echo "::error::Docker is required when use-docker is true."
+          exit 1
+        fi
+
+        touch "$GITHUB_OUTPUT" "$GITHUB_STEP_SUMMARY"
+
+        if ! docker pull "$DOCKER_IMAGE"; then
+          echo "::warning::Pull failed, building $DOCKER_IMAGE locally."
+          docker build --tag "$DOCKER_IMAGE" "${{ github.action_path }}"
+        fi
+
+        docker run --rm \
+          -e SKIP_DETECTION \
+          -e BUILD_TARGET \
+          -e GO_ENABLED \
+          -e PYTHON_ENABLED \
+          -e RUST_ENABLED \
+          -e FRONTEND_ENABLED \
+          -e DOCKER_ENABLED \
+          -e PROTOBUF_ENABLED \
+          -e GITHUB_OUTPUT \
+          -e GITHUB_STEP_SUMMARY \
+          -v "$GITHUB_OUTPUT:$GITHUB_OUTPUT" \
+          -v "$GITHUB_STEP_SUMMARY:$GITHUB_STEP_SUMMARY" \
+          -v "${{ github.workspace }}:/repo" \
+          -w /repo \
+          "$DOCKER_IMAGE"
+
+    - name: Detect languages (host)
       id: detect
+      if: inputs.use-docker != 'true'
       shell: bash
       env:
         SKIP_DETECTION: ${{ inputs.skip-detection }}

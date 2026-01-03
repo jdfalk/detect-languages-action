@@ -12,9 +12,9 @@ Detects programming languages in a repository for CI matrix generation
 
 ### High Priority
 
-- [ ] Review and update README.md with current functionality
-- [ ] Ensure all inputs/outputs are documented in action.yml
-- [ ] Add usage examples for common scenarios
+- [x] Review and update README.md with current functionality (2026-01-03)
+- [x] Ensure all inputs/outputs are documented in action.yml (2026-01-03)
+- [x] Add usage examples for common scenarios (docker usage added) (2026-01-03)
 - [ ] Verify CI workflows are passing
 
 ### Medium Priority
@@ -32,7 +32,8 @@ Detects programming languages in a repository for CI matrix generation
 
 ## Completed
 
-<!-- Add completed items here with date -->
+- 2026-01-03: Added dockerized execution path and automated GHCR publish
+  workflow; pinned base image by digest; updated README/action.yml accordingly.
 
 ## Notes
 

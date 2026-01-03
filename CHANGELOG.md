@@ -14,19 +14,20 @@ and this project adheres to
 
 ### Added
 
-- Initial release of detect-languages-action
+- Dockerized execution path controlled by `use-docker`/`docker-image`
+- Automated GHCR publish workflow with digest pinning and tag bump
 
 ### Changed
 
-<!-- List changes here -->
+- Updated composite action outputs to work across host and docker paths
 
 ### Fixed
 
-<!-- List fixes here -->
+- Prevented future additions of build artifacts from docker publishing
 
 ### Security
 
-<!-- List security updates here -->
+- Container base pinned by digest for reproducible builds
 
 ## [1.0.0] - 2026-01-02
 
