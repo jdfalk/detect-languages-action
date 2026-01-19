@@ -1,6 +1,7 @@
 <!-- file: TODO.md -->
 <!-- version: 1.0.2 -->
 <!-- guid: ad47cbc5-c057-47aa-a933-fb01bef0f898 -->
+<!-- last-edited: 2026-01-19 -->
 
 # TODO - detect-languages-action
 
