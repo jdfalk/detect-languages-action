@@ -53,14 +53,31 @@ def main():
         protobuf_needed = overrides["protobuf"] == "true"
     else:
         # File-based detection
-        has_go = Path("go.mod").exists() or Path("main.go").exists() or Path("cmd").exists()
+        has_go = Path("go.mod").exists() or Path("main.go").exists()
         has_python = any(
             Path(p).exists() for p in ["setup.py", "pyproject.toml", "requirements.txt"]
         )
         has_rust = Path("Cargo.toml").exists()
-        has_frontend = Path("package.json").exists()
+        # Frontend: package.json in root only counts if it has frontend source files,
+        # not if it's just for tooling scripts. web/ or frontend/ dirs always count.
+        has_frontend = any(
+            Path(p).exists()
+            for p in ["web/package.json", "frontend/package.json"]
+        ) or (
+            Path("package.json").exists()
+            and any(
+                Path(p).exists()
+                for p in [
+                    "src/index.js", "src/index.ts", "src/App.tsx",
+                    "src/main.ts", "src/main.js", "src/app.js",
+                ]
+            )
+        )
         has_docker = Path("Dockerfile").exists() or Path("docker-compose.yml").exists()
-        protobuf_needed = any(Path(".").rglob("*.proto"))
+        # Protobuf needs an active build config (buf.gen.yaml), not just .proto files
+        protobuf_needed = (
+            Path("buf.gen.yaml").exists() or Path("buf.gen.yml").exists()
+        ) and any(Path(".").rglob("*.proto"))
 
         # Apply overrides
         if overrides["go"] != "auto":
@@ -91,9 +108,9 @@ def main():
         primary = "unknown"
 
     # Generate basic matrices
-    go_matrix = {"os": ["ubuntu-latest"], "go-version": ["1.23"]} if has_go else {}
-    python_matrix = {"os": ["ubuntu-latest"], "python-version": ["3.12"]} if has_python else {}
-    rust_matrix = {"os": ["ubuntu-latest"], "rust-version": ["1.75"]} if has_rust else {}
+    go_matrix = {"os": ["ubuntu-latest"], "go-version": ["1.24"]} if has_go else {}
+    python_matrix = {"os": ["ubuntu-latest"], "python-version": ["3.13"]} if has_python else {}
+    rust_matrix = {"os": ["ubuntu-latest"], "rust-version": ["stable"]} if has_rust else {}
     frontend_matrix = {"os": ["ubuntu-latest"], "node-version": ["22"]} if has_frontend else {}
     docker_matrix = {"platform": ["linux/amd64"]} if has_docker else {}
 
