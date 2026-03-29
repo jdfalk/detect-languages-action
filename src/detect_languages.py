@@ -54,9 +54,9 @@ def main():
     else:
         # File-based detection
         has_go = Path("go.mod").exists() or Path("main.go").exists()
-        has_python = any(
-            Path(p).exists() for p in ["setup.py", "pyproject.toml", "requirements.txt"]
-        )
+        # Python: require a buildable project (setup.py or pyproject.toml),
+        # not just a requirements.txt which could be for scripts/tooling
+        has_python = Path("setup.py").exists() or Path("pyproject.toml").exists()
         has_rust = Path("Cargo.toml").exists()
         # Frontend: package.json in root only counts if it has frontend source files,
         # not if it's just for tooling scripts. web/ or frontend/ dirs always count.
